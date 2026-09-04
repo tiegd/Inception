@@ -1,9 +1,9 @@
-FROM debian:bookworm
+FROM debian:bookworm-slim
 WORKDIR /app
-COPY conf/requirement.txt .
+# COPY conf/requirement.txt .
+COPY . .
 
-RUN apt update
-RUN apt -y install 
+RUN apt-get update && apt-get install --no-install-recommends -y nginx;
 
-CMD
-VOLUME
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+# VOLUME
