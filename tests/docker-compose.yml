@@ -1,0 +1,42 @@
+services:
+  wordpress:
+    image: wordpress@sha256:b2ceeaabb8fa90e12f32fdf5c2479f4cef4508255fb406bd19aa23b1ce59bc46  # WordPress 7.0
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0@sha256:7dcddc01f13bab2f15cde676d44d01f61fc9f99fe7785e86196dfc07d358ae2b  # MySQL 8.0.46
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      # MYSQL_PASSWORD: wordpress_password
+      # MYSQL_ROOT_PASSWORD: root_secret_password
+      MYSQL_PASSWORD : ${MYSQL_PASSWORD}
+      # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+    secrets:
+      - mysql_root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  db_data:
+
+secrets:
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
