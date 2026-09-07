@@ -1,0 +1,15 @@
+services:
+  nginx:
+    contexte: srcs/requirement/nginx
+
+  wordpress:
+    contexte: srcs/requirement/wordpress
+
+  mariadb:
+    contexte: srcs/requirement/mariadb
+
+volumes:
+  db_data
+
+secrets:
+  
