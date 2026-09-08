@@ -1,15 +1,46 @@
 services:
   nginx:
-    contexte: srcs/requirement/nginx
+    build:
+      contexte: srcs/requirement/nginx
 
   wordpress:
-    contexte: srcs/requirement/wordpress
+    build:
+      contexte: srcs/requirement/wordpress
+    ports:
+      - "8080:80"
+    environement:
+      
+    depends_on:
+      - mariadb:
+        condition: service_healthy
+    restart: unless-stopped
+
 
   mariadb:
-    contexte: srcs/requirement/mariadb
+    build:
+      contexte: srcs/requirement/mariadb
+    environement:
+      MARIABD_DATABASE: wordpress
+      MARIABD_USER: wordpress
+      MARIABD_PASSWORD: /run/secrets/mariadb_password
+      MARIABD_ROOT_PASSWORD: /run/secrets/mariadb_root_password
+    secrets:
+      - mariadb_password
+      - mariadb_root_password
+    volumes:
+      - db_data:var/lib/mariadb
+    healthcheck:
+      test: ["CMD", "ping", "-h", "localhost"]
+      interval: 10s
+      timout: 5s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
   db_data
 
 secrets:
-  
+  mariadb_password:
+    file: ../secrets/db_password.txt
+  mariadb_root_password:
+    file: ../secrets/db_root_password.txt
