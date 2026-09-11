@@ -31,4 +31,28 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
     define('DB_CHARSET', 'utf8');
     define('DB_COLLATE', '');
 
-\$table_prefix = 
+\$table_prefix =  '${WORDPRESS_TABLE_PREFIX:-wp_}';
+
+${WP_SALTS}
+
+define ('WP_DEBUG', false);
+
+if ( !define('ABSPATH'))
+{
+    define ('ABSPATH', __DIR__, '/');
+}
+
+require_once ABSPATH . 'wp-setting.php';
+EOF
+
+    find "$WP_PASS" -type d --exec chmod 750 {} \;
+    find "$WP_PASS" -type f --exec chmod 640 {} \;
+    chown -R www-data:www-data "$WP_PASS"
+
+    echo "WordPress setup complete"
+else
+    echo "WordPress already initialized"
+fi
+
+echo "Starting PHP-FPM"
+exec php-fpm8.2 -F
