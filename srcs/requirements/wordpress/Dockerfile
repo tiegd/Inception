@@ -1,29 +1,20 @@
 FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    php8.2-fpm \
-    php8.2-mysql \
-    php8.2-curl \
-    php8.2-gd \
-    php8.2-intl \
-    php8.2-mbstring \
-    php8.2-soap \
-    php8.2-xml \
-    php8.2-zip \
-    wget \
+RUN apt-get update && apt-get install -y \
     curl \
-    && ln -s /usr/sbin/php-fpm8.2 /usr/local/bin/php-fpm \
+    php \
+    php-fpm \
+    php-mysqli \
+    mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/html
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
 
-# COPY conf/requirement.txt .
-COPY conf/www.conf /etc/php/8.2/fpm/pool.d/
-COPY tools/setup_wordpress.sh /usr/local/bin
+COPY conf/wp-entrypoint.sh /usr/local/bin
+RUN  chmod +x /usr/local/bin/wp-entrypoint.sh
 
 EXPOSE 9000
 
-ENTRYPOINT ["/usr/local/bin/setup_wordpress.sh"]
-
-# CMD ["/usr/sbin/wordpress", "-g", "daemon off;"]
-# VOLUME
+ENTRYPOINT ["wp-entrypoint.sh"]
