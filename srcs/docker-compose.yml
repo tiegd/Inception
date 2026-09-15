@@ -2,6 +2,8 @@ services:
   nginx:
     build:
       contexte: srcs/requirement/nginx
+      volumes:
+        - db_data:/var/www/html
 
   wordpress:
     build:
@@ -14,6 +16,8 @@ services:
       - mariadb:
         condition: service_healthy
     restart: unless-stopped
+    volumes:
+      - db_data:/var/www/html
 
 
   mariadb:
