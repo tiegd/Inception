@@ -54,7 +54,7 @@ services:
     mariadb:
         container_name: mariadb
         image: mariadb
-        build: requirement/mariadb
+        build: requirements/mariadb
         env_file: .env
         secrets:
             - db_password
@@ -67,14 +67,14 @@ services:
         healthcheck:
             test: ["CMD-SHELL", "mariadb-admin ping -h localhost --silent"]
             interval: 5s
-            timout: 3s
+            timeout: 3s
             retries: 20
             start_period: 10s
 
     wordpress:
         container_name: wordpress
-        images: wordpress
-        build: requirement/wordpress
+        image: wordpress
+        build: requirements/wordpress
         env_file: .env
         secrets:
             - db_password
@@ -90,8 +90,8 @@ services:
 
     nginx:
         container_name: nginx
-        images: nginx
-        build: requirement/nginx
+        image: nginx
+        build: requirements/nginx
         depends_on:
             - wordpress
         ports:
