@@ -9,7 +9,7 @@ RUN usermod -u 33 www-data && groupmod -g 33 www-data
 RUN mkdir -p /etc/nginx/ssl /var/www/html \
     && openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/inception.key \
-    -out /etc/nginx/ssl/incption.crt \
+    -out /etc/nginx/ssl/inception.crt \
     -subj "/C=FR/ST=IDF/L=Paris/O=42/CN=gaducurt.42.fr"
 
 COPY conf/nginx.conf /etc/nginx/nginx.conf
