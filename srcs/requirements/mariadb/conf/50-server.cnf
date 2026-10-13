@@ -7,7 +7,7 @@ socket = var/run/mysqld/mysqld.sock
 basedir = /usr
 tmpdir = /tmp
 
-datadir = var/lib/mysql
+datadir = /var/lib/mysql
 
 log-error = var/log/mysql/error.log
 
