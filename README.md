@@ -26,6 +26,25 @@ git clone git@github.com:tiegd/Inception.git
 
 ```
 
+
+### For display wordpress tables in mariadb container
+
+```bash
+docker exec -it mariadb mariadb -u root -p
+```
+```sql
+show databases;
+use wordpress
+show tables;
+select wp_users;
+select * from wp_users;
+select user_login from wp_users;
+```
+or just :
+```sql
+use wordpress select user_login from wp_users;
+```
+
 ## Resources
 #### Docker
 - https://blog.stephane-robert.info/docs/conteneurisation/
