@@ -38,6 +38,14 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
         --role=author \
         --user_pass="$WP_USER_PASSWORD" \
         --allow-root
+    
+    wp post creat \
+        --post-title='Finalement je vais faire le WAF' \
+        --post-content='pde-petr le golden' \
+        --post-status=published \
+        --post-author=2 \
+        --path=/var/www/html \
+        --allow-root
 
 fi
 
