@@ -39,13 +39,22 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
         --user_pass="$WP_USER_PASSWORD" \
         --allow-root
     
-    wp post create \
-        --post-title='Finalement je vais faire le WAF' \
-        --post-content='pde-petr le golden' \
-        --post-status=published \
-        --post-author=2 \
-        --path="$WP_PATH" \
-        --allow-root
+    POST_ID=$(wp post create \
+        --post_title='Finalement je vais faire le WAF' \
+        --post_content='pde-petr le golden' \
+        --post_status=publish \
+        --post_author=2 \
+	--porcelain \
+        --path=/var/www/html \
+	--allow-root)
+
+    wp comment create \
+	--comment_post_ID="$POST_ID" \
+	--comment_content='Fini la DB deja' \
+	--comment_author=gaducurt \
+	--comment_approved=1 \
+	--path=/var/www/html \
+	--allow-root
 
 fi
 
