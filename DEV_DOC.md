@@ -210,6 +210,12 @@ docker exec -it mariadb mariadb -u root -p wordpress -e "SELECT user_login FROM 
 
 `-it` is required for the password prompt to work.
 
+### Display the WordPress postes in the MariaDB container
+
+```bash
+docker exec -it mariadb mariadb -u root -p wordpress -e "SELECT post_name FROM wp_posts;"
+```
+
 ### Volumes
 
 ```bash
