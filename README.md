@@ -117,8 +117,8 @@ Then open:
 | `make re` | `fclean`, then `make` |
 
 ### More documentation
-- `USER_DOC.md`: how to use the stack (start, stop, access, credentials, checks)
-- `DEV_DOC.md`: how to set up, build, debug and where the data lives
+- [USER_DOC.md](USER_DOC.md): how to use the stack (start, stop, access, credentials, checks)
+- [DEV_DOC.md](DEV_DOC.md): how to set up, build, debug and where the data lives
 
 ### For display wordpress tables in mariadb container
 
