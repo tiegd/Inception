@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 set -e
 
@@ -8,11 +8,13 @@ WP_USER_PASSWORD=$(grep '^WP_USER_PASSWORD=' /run/secrets/credentials | cut -d= 
 
 WP_PATH=/var/www/html
 
-until mariadb -h mariadb -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1" > /dev/null 2>&1; do
-    if [ "$i" -ge 30 ]; then
+declare -i i=0
+until mariadb -h mariadb -P 3306 -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1" > /dev/null 2>&1; do
+    if [[ $i -ge 30 ]]; then
         echo "MariaDB is not reachable, giving up" >&2
         exit 1
     fi
+    i=i+1
     sleep 2
 done
 
@@ -24,7 +26,7 @@ if [ ! -f "$WP_PATH/wp-config.php" ]; then
         --dbname="$MYSQL_DATABASE" \
         --dbuser="$MYSQL_USER" \
         --dbpass="$MYSQL_PASSWORD" \
-        --dbhost=mariadb \
+        --dbhost="mariadb:3306" \
         --allow-root
     
     wp core install --path="$WP_PATH" \

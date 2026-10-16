@@ -35,13 +35,21 @@ services:
         networks:
             - inception
         restart: unless-stopped
+        healthcheck:
+            test: ["CMD-SHELL", "service php8.2-fpm status && exit 0 || exit 1"]
+            interval: 5s
+            timeout: 3s
+            retries: 20
+            start_period: 10s
+            start_interval: 1s
 
     nginx:
         container_name: nginx
         image: nginx:1.0
         build: requirements/nginx
         depends_on:
-            - wordpress
+          wordpress:
+            condition: service_healthy
         ports:
             - "443:443"
         volumes:
