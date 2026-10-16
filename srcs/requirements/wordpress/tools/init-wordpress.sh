@@ -9,7 +9,10 @@ WP_USER_PASSWORD=$(grep '^WP_USER_PASSWORD=' /run/secrets/credentials | cut -d= 
 WP_PATH=/var/www/html
 
 until mariadb -h mariadb -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "SELECT 1" > /dev/null 2>&1; do
-    echo "Waiting for MariaDB"
+    if [ "$i" -ge 30 ]; then
+        echo "MariaDB is not reachable, giving up" >&2
+        exit 1
+    fi
     sleep 2
 done
 
